@@ -45,7 +45,7 @@ def eval_nested_kfold(encoder, name, loc='./data/', k=10, seed=1234, use_nb=Fals
             innerkf = KFold(len(X_train), n_folds=k, random_state=seed+1)
             innerscores = []
             for innertrain, innertest in innerkf:
-        
+
                 # Split data
                 X_innertrain = X_train[innertrain]
                 y_innertrain = y_train[innertrain]
@@ -76,13 +76,13 @@ def eval_nested_kfold(encoder, name, loc='./data/', k=10, seed=1234, use_nb=Fals
         s = scan[s_ind]
         print scanscores
         print s
- 
+
         # NB (if applicable)
         if use_nb:
             NBtrain, NBtest = compute_nb(Xraw, y_train, Xraw_test)
             X_train = hstack((X_train, NBtrain))
             X_test = hstack((X_test, NBtest))
-       
+
         # Train classifier
         clf = LogisticRegression(C=s)
         clf.fit(X_train, y_train)
@@ -108,6 +108,3 @@ def compute_nb(X, y, Z):
     trainX = nbsvm.process_text(X, dic, r, [1,2])
     devX = nbsvm.process_text(Z, dic, r, [1,2])
     return trainX, devX
-
-
-
