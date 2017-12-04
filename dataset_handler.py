@@ -24,7 +24,7 @@ def load_data(encoder, name, loc='./data/', seed=1234):
     z['text'] = text
     z['labels'] = labels
     print 'Computing skip-thought vectors...'
-    features = encoder.encode(text, verbose=False)
+    features = encoder.transform(text)
     return z, features
 
 
@@ -111,8 +111,4 @@ def shuffle_data(X, L, seed=1234):
     prng.shuffle(inds)
     X = [X[i] for i in inds]
     L = L[inds]
-    return (X, L)    
-
-
-
-
+    return (X, L)
