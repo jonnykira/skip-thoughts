@@ -13,15 +13,13 @@ parser.add_argument('--task', type=str, default='MR',
                     help='1 of 4 classiicatin tasks. This can be MR, CR SUBJ or MPQA')
 parser.add_argument('--data_path', type=str, default=None,
                     help='Path to the directory containing the data. Must match the data for the given task!')
-# weights = openai.utils.extract_for_encoder(model_dir='/Users/jonathan/Desktop/Experiment/checkpoints/994')
-#
-# np.save('model.npy', weights)
+
+
 args = parser.parse_args()
 
 encoder = openai.encoder.Model(os.path.join(args.restore_path,'model.npy'))
 
-# eval_nested_kfold(encoder, name, loc='./data/', k=10, seed=1234, use_nb=False)
-scores = eval_classification.eval_nested_kfold(encoder,name=args.task,loc=args.data_path, use_nb=False)
+scores = eval_classification.eval_nested_kfold(encoder,name=args.task,loc=args.data_path, k=10, seed=1234, use_nb=False)
 
-# save the results vector in the results
+# save the accuracy scores vector in the results folder
 np.save('./results/' + args.tasks, scores)
