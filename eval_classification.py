@@ -65,17 +65,17 @@ def eval_nested_kfold(encoder, name, loc='./data/', k=10, seed=1234, use_nb=Fals
                 clf = LogisticRegression(C=s)
                 clf.fit(X_innertrain, y_innertrain)
                 acc = clf.score(X_innertest, y_innertest)
-                innerscores.append(acc)
-                print (s, acc)
+                innerscores.append(acc) # keep the accuracies from each fold
+                print (s, acc) # print the reg coeff and the accuracy for each fold tuple - (reg, acc on fold)
 
             # Append mean score
-            scanscores.append(np.mean(innerscores))
+            scanscores.append(np.mean(innerscores))# find the mean accuracy across the folds for each reg coefficient
 
         # Get the index of the best score
         s_ind = np.argmax(scanscores)
         s = scan[s_ind]
-        print scanscores
-        print s
+        print scanscores # this is the mean score (from 10 folds of the training set) for each reg coefficient
+        print s # optimal regularization coefficient for this train/test split
 
         # NB (if applicable)
         if use_nb:
@@ -84,14 +84,14 @@ def eval_nested_kfold(encoder, name, loc='./data/', k=10, seed=1234, use_nb=Fals
             X_test = hstack((X_test, NBtest))
 
         # Train classifier
-        clf = LogisticRegression(C=s)
+        clf = LogisticRegression(C=s) # train a classifier with this reg coeff on the outer train/test split
         clf.fit(X_train, y_train)
 
         # Evaluate
         acc = clf.score(X_test, y_test)
         scores.append(acc)
-        print scores
-
+        print scores    # test set scores
+    print('highest accuracy: ', max(scores))
     return scores
 
 
