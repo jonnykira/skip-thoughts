@@ -3,7 +3,7 @@ import numpy as np
 import tensorflow as tf
 from tqdm import tqdm
 from sklearn.externals import joblib
-from utils import HParams, preprocess, iter_data, extract_for_encoder
+from utils import HParams, preprocess, iter_data, concatenate_for_encoder
 import pprint
 
 global nloaded
@@ -116,7 +116,7 @@ def batch_pad(xs, nbatch, nsteps):
 
 class Model(object):
 
-    def __init__(self, nbatch=128, nsteps=64):
+    def __init__(self, restore_path, nbatch=128, nsteps=64):
 
         global hps
         hps = HParams(
@@ -134,7 +134,8 @@ class Model(object):
         )
         global params
 
-        params = [np.load('/Users/jonathan/Desktop/Experiment/classification/weights_900_test/{}.npy'.format(i)) for i in range(15)]
+        params = concatenate_for_encoder(restore_path)
+        #params = [np.load('/Users/jonathan/Desktop/Experiment/classification/weights_900_test/{}.npy'.format(i)) for i in range(15)]
         params[2] = np.concatenate(params[2:6], axis=1)
         params[3:6] = []
 
@@ -211,5 +212,5 @@ if __name__ == '__main__':
     mdl = Model()
     text = ['encsfasdfasdfasdfasdfode','this']
     text_features = mdl.transform(text)
-    # print(text_features.shape)
+    print(text_features.shape)
     # print(np.sum(text_features))
