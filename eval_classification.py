@@ -62,7 +62,7 @@ def eval_nested_kfold(encoder, name, loc='./data/', k=10, seed=1234, use_nb=Fals
                     X_innertest = hstack((X_innertest, NBtest))
 
                 # Train classifier
-                clf = LogisticRegression(C=s)
+                clf = LogisticRegression(C=s,penalty='l1')
                 clf.fit(X_innertrain, y_innertrain)
                 acc = clf.score(X_innertest, y_innertest)
                 innerscores.append(acc) # keep the accuracies from each fold
@@ -84,7 +84,7 @@ def eval_nested_kfold(encoder, name, loc='./data/', k=10, seed=1234, use_nb=Fals
             X_test = hstack((X_test, NBtest))
 
         # Train classifier
-        clf = LogisticRegression(C=s) # train a classifier with this reg coeff on the outer train/test split
+        clf = LogisticRegression(C=s, penalty='l1') # train a classifier with this reg coeff on the outer train/test split
         clf.fit(X_train, y_train)
 
         # Evaluate
